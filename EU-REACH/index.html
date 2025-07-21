@@ -1,0 +1,466 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>欧盟 REACH 法规 (EU-REACH)</title>
+    <style>
+      /* --- 全局样式 --- */
+      body {
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI",
+          "Microsoft YaHei", "Helvetica Neue", Helvetica, Arial, sans-serif;
+        line-height: 1.7;
+        margin: 0;
+        padding: 0;
+        background-color: #f0f4f8; /* 淡蓝色背景 */
+        color: #333;
+      }
+
+      .container {
+        max-width: 1200px; /* 增加宽度以适应侧边栏 */
+        margin: 20px auto;
+        padding: 20px;
+        background-color: #ffffff;
+        border-radius: 10px;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+      }
+
+      /* --- 头部 --- */
+      header {
+        text-align: center;
+        padding-bottom: 25px;
+        border-bottom: 1px solid #dee2e6;
+      }
+
+      header h1 {
+        color: #003399; /* 欧盟蓝 */
+        margin: 0;
+        font-size: 2.5em;
+      }
+
+      header p {
+        margin: 8px 0 0;
+        color: #555;
+        font-size: 1.1em;
+      }
+
+      /* --- 主体布局 --- */
+      .main-layout {
+        display: flex;
+        gap: 30px; /* 侧边栏和内容的间距 */
+        margin-top: 25px;
+      }
+
+      /* --- 侧边栏导航 --- */
+      nav {
+        display: flex;
+        flex-direction: column; /* 垂直排列 */
+        justify-content: flex-start;
+        background-color: #f8f9fa;
+        padding: 10px 0;
+        border-radius: 8px;
+        width: 220px; /* 侧边栏宽度 */
+        flex-shrink: 0; /* 防止侧边栏收缩 */
+        border: 1px solid #dee2e6;
+        align-self: flex-start; /* 顶部对齐 */
+      }
+
+      nav a {
+        color: #003399;
+        padding: 13px 20px;
+        text-decoration: none;
+        font-weight: 500;
+        transition: background-color 0.3s ease, color 0.3s ease,
+          border-left-color 0.3s ease;
+        text-align: left;
+        border-left: 4px solid transparent; /* 活动状态指示器 */
+      }
+
+      nav a:hover {
+        background-color: #e9ecef;
+        color: #002266;
+      }
+
+      nav a.active {
+        background-color: #eaf2ff;
+        color: #002266;
+        font-weight: bold;
+        border-left-color: #003399; /* 激活时高亮 */
+      }
+
+      /* --- 内容区域 --- */
+      .content-area {
+        flex-grow: 1;
+        min-width: 0; /* 防止内容溢出 */
+      }
+
+      .section {
+        padding: 25px;
+        background-color: #ffffff;
+        border: 1px solid #e9ecef;
+        border-radius: 5px;
+        display: none; /* 默认隐藏 */
+      }
+
+      .section h2 {
+        color: #003399;
+        border-bottom: 2px solid #ffcc00; /* 欧盟黄 */
+        padding-bottom: 10px;
+        margin-top: 0;
+        font-size: 1.8em;
+      }
+
+      .section h3 {
+        color: #003399;
+        font-size: 1.4em;
+        margin-top: 25px;
+      }
+
+      .section p,
+      .section ul,
+      .section dl {
+        margin-bottom: 15px;
+        color: #495057;
+      }
+
+      .section ul {
+        padding-left: 20px;
+        list-style-type: "★ "; /* 使用欧盟星形作为列表符号 */
+      }
+
+      .section li {
+        margin-bottom: 10px;
+        padding-left: 10px;
+      }
+
+      .section dt {
+        font-weight: bold;
+        color: #003399;
+      }
+
+      .section dd {
+        margin-left: 20px;
+        margin-bottom: 15px;
+      }
+
+      /* --- 图文并茂样式 --- */
+      .image-container {
+        text-align: center;
+        margin: 25px 0;
+        padding: 15px;
+        background: #f8f9fa;
+        border: 1px solid #dee2e6;
+        border-radius: 5px;
+      }
+      .image-container img {
+        max-width: 100%;
+        height: auto;
+        border-radius: 5px;
+      }
+      .image-container figcaption {
+        margin-top: 10px;
+        font-size: 0.9em;
+        color: #6c757d;
+        font-style: italic;
+      }
+
+      /* --- 流程图样式 --- */
+      .flowchart {
+        display: flex;
+        justify-content: space-around;
+        align-items: center;
+        flex-wrap: wrap;
+        margin: 20px 0;
+      }
+      .flowchart-step {
+        background-color: #eaf2ff;
+        border: 2px solid #003399;
+        border-radius: 50%;
+        width: 120px;
+        height: 120px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        text-align: center;
+        font-weight: bold;
+        color: #003399;
+        margin: 10px;
+        padding: 10px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        transition: transform 0.2s ease;
+      }
+      .flowchart-step:hover {
+        transform: scale(1.05);
+      }
+      .flowchart-arrow {
+        font-size: 2.5em;
+        color: #ffcc00;
+        margin: 10px;
+      }
+
+      /* --- 其他样式 --- */
+      .important-note {
+        background-color: #fff9c4;
+        padding: 15px;
+        border-left: 5px solid #ffcc00;
+        border-radius: 4px;
+      }
+
+      footer {
+        text-align: center;
+        margin-top: 30px;
+        padding-top: 20px;
+        border-top: 1px solid #dee2e6;
+        font-size: 0.9em;
+        color: #6c757d;
+      }
+
+      /* --- 响应式设计 --- */
+      @media (max-width: 900px) {
+        .main-layout {
+          flex-direction: column;
+        }
+        nav {
+          width: 100%;
+          flex-direction: row; /* 变回水平导航 */
+          background-color: #003399;
+          padding: 0;
+          border: none;
+          border-radius: 5px;
+          margin-bottom: 25px;
+          overflow: hidden;
+        }
+        nav a {
+          color: white;
+          text-align: center;
+          flex-grow: 1;
+          border-left: none; /* 移除侧边框 */
+          border-bottom: 4px solid transparent; /* 底部指示器 */
+        }
+        nav a:hover {
+          background-color: #002266;
+        }
+        nav a.active {
+          background-color: #002266;
+          border-bottom-color: #ffcc00; /* 激活时高亮底部 */
+          border-left-color: transparent;
+        }
+        .flowchart {
+          flex-direction: column;
+        }
+        .flowchart-arrow {
+          transform: rotate(90deg);
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <header>
+        <h1>欧盟 REACH 法规</h1>
+        <p>
+          Registration, Evaluation, Authorisation and Restriction of Chemicals
+        </p>
+      </header>
+
+      <div class="main-layout">
+        <nav>
+          <a
+            href="#about"
+            class="nav-link active"
+            onclick="showSection('about', this)"
+            >关于REACH</a
+          >
+          <a
+            href="#process"
+            class="nav-link"
+            onclick="showSection('process', this)"
+            >注册流程</a
+          >
+          <a
+            href="#obligations"
+            class="nav-link"
+            onclick="showSection('obligations', this)"
+            >企业义务</a
+          >
+          <a href="#faq" class="nav-link" onclick="showSection('faq', this)"
+            >常见问题</a
+          >
+        </nav>
+
+        <main class="content-area">
+          <div id="about" class="section">
+            <h2>关于REACH法规</h2>
+            <p>
+              REACH是欧盟关于<strong>化学品注册、评估、授权和限制</strong>的法规（(EC)
+              No
+              1907/2006）。它于2007年6月1日生效，是欧盟为了提升对人类健康和环境保护的水平，同时增强化工产业的竞争力而制定的综合性化学品管理体系。
+            </p>
+            <h3>核心目标</h3>
+            <ul>
+              <li>保护人类健康和环境免受化学品可能带来的风险。</li>
+              <li>提升欧盟化学工业的竞争力和创新能力。</li>
+              <li>推动对化学品危害评估的替代方法的开发。</li>
+              <li>确保欧盟内部市场上物质的自由流通。</li>
+            </ul>
+            <div class="image-container">
+              <img
+                src="https://placehold.co/800x300/003399/FFFFFF?text=REACH%E6%B3%95%E8%A7%84%E6%A0%B8%E5%BF%83%E7%90%86%E5%BF%B5"
+                alt="REACH法规核心理念图示"
+                onerror="this.onerror=null;this.src='https://placehold.co/800x300/cccccc/000000?text=Image+Not+Found';"
+              />
+              <figcaption>REACH法规旨在平衡化学品安全与产业发展。</figcaption>
+            </div>
+            <h3>关键机构与原则</h3>
+            <p>
+              <strong>欧洲化学品管理局 (ECHA)</strong>
+              是负责管理和协调REACH法规实施的核心机构。REACH法规的一个基本原则是<strong
+                >“无数据，无市场” (No Data, No Market)</strong
+              >，即企业必须为其在欧盟市场上销售的化学物质（年产量或进口量超过1吨）向ECHA提交注册，否则该物质将不能在欧盟市场合法存在。
+            </p>
+          </div>
+
+          <div id="process" class="section">
+            <h2>REACH注册流程概览</h2>
+            <p>
+              REACH注册是一个复杂但结构化的过程，要求企业为其化学物质收集数据并进行风险评估。以下是简化的流程：
+            </p>
+            <div class="flowchart">
+              <div class="flowchart-step">第一步<br />查询与数据缺口分析</div>
+              <div class="flowchart-arrow">➔</div>
+              <div class="flowchart-step">
+                第二步<br />数据共享 (SIEF) / 购买LoA
+              </div>
+              <div class="flowchart-arrow">➔</div>
+              <div class="flowchart-step">第三步<br />制作注册卷宗</div>
+              <div class="flowchart-arrow">➔</div>
+              <div class="flowchart-step">第四步<br />通过REACH-IT提交</div>
+              <div class="flowchart-arrow">➔</div>
+              <div class="flowchart-step">第五步<br />ECHA评估与注册成功</div>
+            </div>
+            <h3>流程详解</h3>
+            <ul>
+              <li>
+                <strong>查询 (Inquiry):</strong>
+                在提交注册前，必须向ECHA提交查询，以确定是否已有其他公司注册了相同物质，从而促进数据共享。
+              </li>
+              <li>
+                <strong>数据共享与SIEF:</strong>
+                相同物质的潜在注册人需组成“物质信息交换论坛”(SIEF)，共同准备注册所需的数据，分摊测试成本。通常通过购买授权信(LoA)来获得数据使用权。
+              </li>
+              <li>
+                <strong>卷宗准备:</strong>
+                使用IUCLID软件准备技术卷宗，对于年量超过10吨的物质，还需准备化学品安全报告(CSR)。
+              </li>
+              <li>
+                <strong>提交与评估:</strong>
+                通过ECHA的REACH-IT平台在线提交卷宗。ECHA会对卷宗进行完整性检查和合规性评估。
+              </li>
+            </ul>
+          </div>
+
+          <div id="obligations" class="section">
+            <h2>不同角色的企业义务</h2>
+            <p>在REACH法规下，您在供应链中的角色决定了您的具体责任。</p>
+            <div class="image-container">
+              <img
+                src="https://placehold.co/800x250/003399/FFFFFF?text=%E4%BE%9B%E5%BA%94%E9%93%BE%E4%B8%AD%E7%9A%84%E4%B8%8D%E5%90%8C%E8%A7%92%E8%89%B2"
+                alt="供应链角色图"
+                onerror="this.onerror=null;this.src='https://placehold.co/800x250/cccccc/000000?text=Image+Not+Found';"
+              />
+              <figcaption>
+                制造商、进口商和下游用户在供应链中的位置。
+              </figcaption>
+            </div>
+            <h3>制造商 (Manufacturer)</h3>
+            <p>
+              在欧盟境内生产化学物质的企业，需要为年产量超过1吨的物质进行注册。
+            </p>
+            <h3>进口商 (Importer)</h3>
+            <p>
+              从非欧盟国家/地区向欧盟进口化学物质或混合物的企业，承担与制造商相同的注册义务。
+            </p>
+            <h3>下游用户 (Downstream User)</h3>
+            <p>
+              在工业或专业活动中使用化学物质（无论是单独使用还是在混合物中）的企业。他们的主要义务是确保其使用方式已包含在供应商提供的安全数据表(SDS)的暴露场景中。
+            </p>
+            <h3>唯一代表 (Only Representative - OR)</h3>
+            <p>
+              非欧盟的制造商可以指定一个位于欧盟境内的法人实体作为其“唯一代表”，由OR代其履行进口商的注册义务。
+            </p>
+          </div>
+
+          <div id="faq" class="section">
+            <h2>常见问题 (FAQ)</h2>
+            <dl>
+              <dt>1. 什么是高度关注物质 (SVHC)？</dt>
+              <dd>
+                SVHC是指那些对人类健康或环境可能造成严重且往往不可逆转影响的化学物质。例如致癌、致突变或具有生殖毒性的物质(CMR)，或具有持久性、生物累积性和毒性的物质(PBT)。SVHC清单会定期更新。
+              </dd>
+
+              <dt>2. 如果我的产品（物品）中含有SVHC，我该怎么办？</dt>
+              <dd>
+                如果物品中含有的SVHC浓度超过0.1%
+                (w/w)，且该物质在该物品中的年总量超过1吨，则需要向ECHA进行通报。此外，无论吨位如何，只要浓度超过0.1%，就有义务在供应链中进行信息传递。
+              </dd>
+
+              <dt>3. 什么是授权清单和限制清单？</dt>
+              <dd>
+                <strong>授权清单 (Annex XIV):</strong>
+                是从SVHC候选清单中筛选出的物质列表。列入此清单的物质，在日落之日后，除非获得特定用途的授权，否则不得投放市场或使用。<br /><strong
+                  >限制清单 (Annex XVII):</strong
+                >
+                列出了对某些化学物质的生产、投放市场或使用的限制条件。例如，限制其在特定产品（如玩具、纺织品）中的使用或浓度。
+              </dd>
+
+              <dt>4. REACH法规是否适用于所有化学品？</dt>
+              <dd>
+                不是。某些受其他特定法规管理的物质（如放射性物质、药品、食品添加剂等）可以豁免REACH的部分或全部义务。此外，天然存在的物质（如矿物、石油）如果未经化学改性，也可能获得豁免。
+              </dd>
+            </dl>
+          </div>
+        </main>
+      </div>
+
+      <footer>
+        <p>
+          免责声明：本页面提供的信息仅供一般参考，不构成法律或专业建议。所有信息应以欧洲化学品管理局(ECHA)官方发布为准。
+        </p>
+        <p id="generation-date"></p>
+      </footer>
+    </div>
+
+    <script>
+      // --- 页面加载时执行的函数 ---
+      document.addEventListener("DOMContentLoaded", () => {
+        // 默认显示第一个section
+        showSection("about", document.querySelector(".nav-link"));
+        // 设置页面生成日期
+        const date = new Date();
+        document.getElementById(
+          "generation-date"
+        ).innerText = `页面生成于：${date.getFullYear()}年${
+          date.getMonth() + 1
+        }月${date.getDate()}日`;
+      });
+
+      // --- 导航切换函数 ---
+      function showSection(sectionId, element) {
+        // 隐藏所有 section
+        const sections = document.querySelectorAll(".section");
+        sections.forEach((section) => {
+          section.style.display = "none";
+        });
+        // 显示目标 section
+        document.getElementById(sectionId).style.display = "block";
+
+        // 更新导航链接的 active 状态
+        const navLinks = document.querySelectorAll(".nav-link");
+        navLinks.forEach((link) => {
+          link.classList.remove("active");
+        });
+        element.classList.add("active");
+      }
+    </script>
+  </body>
+</html>
