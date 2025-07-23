@@ -4,177 +4,228 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>ChemLinked Japan 有料会員メールマガジン</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;700&family=Roboto:wght@400;700&display=swap"
+      rel="stylesheet"
+    />
     <style>
       /* --- 全体のスタイル --- */
+      :root {
+        --primary-color: #005f73;
+        --secondary-color: #0a9396;
+        --background-color: #fdfbf7;
+        --card-background: #ffffff;
+        --text-color: #212529;
+        --light-gray: #e9ecef;
+        --border-radius: 12px;
+      }
+
       body {
-        font-family: "Helvetica Neue", "Arial", "Hiragino Kaku Gothic ProN",
-          "Hiragino Sans", "Meiryo", sans-serif;
-        line-height: 1.8;
-        color: #333;
-        background-color: #f8f9fa;
+        font-family: "Roboto", "Noto Sans JP", sans-serif;
+        line-height: 1.7;
+        color: var(--text-color);
+        background-color: var(--background-color);
         margin: 0;
-        padding: 0;
+        padding: 20px 0;
       }
 
       .container {
-        max-width: 900px;
+        max-width: 960px;
         margin: 30px auto;
-        padding: 20px;
-        background-color: #ffffff;
-        border-radius: 12px;
-        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+        padding: 0 20px;
       }
 
       /* --- ヘッダー --- */
       header {
         text-align: center;
-        padding-bottom: 20px;
-        border-bottom: 3px solid #0056b3;
-        margin-bottom: 30px;
+        padding: 40px 20px;
+        background: linear-gradient(135deg, #005f73, #0a9396);
+        border-radius: var(--border-radius);
+        margin-bottom: 40px;
+        box-shadow: 0 8px 25px rgba(0, 95, 115, 0.2);
       }
 
       header h1 {
-        color: #0056b3;
-        font-size: 2.2em;
+        color: #ffffff;
+        font-size: 2.5em;
         margin: 0;
         font-weight: 700;
+        text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.2);
       }
 
       header p {
-        font-size: 1.1em;
-        color: #555;
+        font-size: 1.2em;
+        color: rgba(255, 255, 255, 0.9);
         margin-top: 10px;
+        font-weight: 400;
       }
 
       /* --- セクション --- */
       .section {
-        margin-bottom: 40px;
+        margin-bottom: 50px;
       }
 
       .section h2 {
-        font-size: 1.8em;
-        color: #0056b3;
-        border-left: 5px solid #007bff;
-        padding-left: 15px;
-        margin-bottom: 20px;
+        font-size: 2em;
+        color: var(--primary-color);
+        padding-bottom: 10px;
+        border-bottom: 3px solid var(--secondary-color);
+        margin-bottom: 25px;
+        display: inline-block;
+      }
+
+      .section p {
+        font-size: 1.05em;
       }
 
       /* --- 会員プラン --- */
       .plans {
-        display: flex;
-        gap: 25px;
-        justify-content: space-around;
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 30px;
       }
 
       .plan {
-        flex: 1;
-        padding: 25px;
-        border: 1px solid #e0e0e0;
-        border-radius: 10px;
-        background-color: #fdfdfd;
+        padding: 30px;
+        border-radius: var(--border-radius);
+        background-color: var(--card-background);
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.04);
+        border: 1px solid var(--light-gray);
+        border-top: 5px solid;
         transition: transform 0.3s, box-shadow 0.3s;
       }
 
       .plan:hover {
-        transform: translateY(-5px);
-        box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
+        transform: translateY(-8px);
+        box-shadow: 0 10px 20px rgba(0, 0, 0, 0.08);
       }
 
       .plan h3 {
         margin-top: 0;
-        font-size: 1.4em;
-        color: #007bff;
+        font-size: 1.6em;
+        font-weight: 700;
         display: flex;
         align-items: center;
+        gap: 12px;
       }
 
       .plan h3::before {
-        content: "🔹";
-        margin-right: 10px;
-        font-size: 0.9em;
+        content: "";
+        display: inline-block;
+        width: 24px;
+        height: 24px;
+        background-size: contain;
       }
 
       .plan p {
-        color: #444;
+        color: #555;
         font-size: 1em;
+        margin-bottom: 0;
       }
 
+      .plan-standard {
+        border-top-color: var(--secondary-color);
+      }
+      .plan-standard h3 {
+        color: var(--secondary-color);
+      }
+      .plan-standard h3::before {
+        background-image: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="%230a9396"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/></svg>');
+      }
+
+      .plan-corporate {
+        border-top-color: #ee9b00;
+      }
       .plan-corporate h3 {
-        color: #28a745;
+        color: #ee9b00;
       }
       .plan-corporate h3::before {
-        content: "⭐";
-        margin-right: 10px;
+        background-image: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="%23ee9b00"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>');
       }
 
       /* --- テーマテーブル --- */
       .table-wrapper {
-        overflow-x: auto; /* スマホ表示で表がはみ出た場合にスクロールさせる */
+        overflow-x: auto;
+        border: 1px solid var(--light-gray);
+        border-radius: var(--border-radius);
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.04);
       }
 
       table {
         width: 100%;
         border-collapse: collapse;
-        margin-top: 20px;
-        font-size: 0.95em;
+        font-size: 1em;
       }
 
       th,
       td {
-        padding: 15px;
+        padding: 16px 20px;
         text-align: left;
-        border-bottom: 1px solid #ddd;
+        border-bottom: 1px solid var(--light-gray);
+      }
+
+      tr:last-child td {
+        border-bottom: none;
       }
 
       thead th {
-        background-color: #0056b3;
-        color: white;
-        font-weight: 600;
+        background-color: #f8f9fa;
+        color: var(--primary-color);
+        font-weight: 700;
+        font-size: 1.1em;
         text-align: center;
       }
 
       tbody tr {
-        transition: background-color 0.2s;
+        transition: background-color 0.25s;
       }
 
       tbody tr:hover {
-        background-color: #e9f5ff;
-        cursor: pointer;
+        background-color: #eef7f7;
       }
 
       td:first-child {
         text-align: center;
         font-weight: bold;
-        color: #0056b3;
+        color: var(--secondary-color);
+        font-size: 1.1em;
       }
 
       /* --- フッター --- */
       footer {
         text-align: center;
-        margin-top: 40px;
-        padding-top: 20px;
-        border-top: 1px solid #e0e0e0;
+        margin-top: 50px;
+        padding: 20px 0;
+        border-top: 1px solid var(--light-gray);
         color: #888;
         font-size: 0.9em;
       }
 
       /* --- レスポンシブ対応 --- */
       @media (max-width: 768px) {
+        body {
+          padding: 10px 0;
+        }
         .container {
           margin: 15px;
-          padding: 15px;
+          padding: 0 10px;
         }
 
         header h1 {
-          font-size: 1.8em;
+          font-size: 2em;
+        }
+        header p {
+          font-size: 1em;
         }
 
         .section h2 {
-          font-size: 1.5em;
+          font-size: 1.6em;
         }
 
         .plans {
-          flex-direction: column;
+          grid-template-columns: 1fr;
         }
       }
     </style>
@@ -216,11 +267,8 @@
 
         <section class="section">
           <h2>配信テーマ一覧</h2>
-          <p>
-            以下の表の行をクリックすると、テーマの登録をシミュレーションできます。
-          </p>
           <div class="table-wrapper">
-            <table id="themeTable">
+            <table>
               <thead>
                 <tr>
                   <th>連番</th>
@@ -313,31 +361,8 @@
       </main>
 
       <footer>
-        <p>&copy; ChemLinked. All Rights Reserved.</p>
+        <p>&copy; 2024 ChemLinked. All Rights Reserved.</p>
       </footer>
     </div>
-
-    <script>
-      // DOMが読み込まれたら実行
-      document.addEventListener("DOMContentLoaded", function () {
-        const table = document.getElementById("themeTable");
-        const rows = table
-          .getElementsByTagName("tbody")[0]
-          .getElementsByTagName("tr");
-
-        // 各行にクリックイベントを追加
-        for (let i = 0; i < rows.length; i++) {
-          rows[i].addEventListener("click", function () {
-            // 行からテーマ名を取得 (2番目のセル)
-            const themeName = this.cells[1].textContent;
-
-            // 確認のアラートを表示
-            alert(
-              "「" + themeName + "」を登録しますか？\n（これはデモ機能です）"
-            );
-          });
-        }
-      });
-    </script>
   </body>
 </html>
