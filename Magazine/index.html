@@ -1,0 +1,343 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>ChemLinked Japan 有料会員メールマガジン</title>
+    <style>
+      /* --- 全体のスタイル --- */
+      body {
+        font-family: "Helvetica Neue", "Arial", "Hiragino Kaku Gothic ProN",
+          "Hiragino Sans", "Meiryo", sans-serif;
+        line-height: 1.8;
+        color: #333;
+        background-color: #f8f9fa;
+        margin: 0;
+        padding: 0;
+      }
+
+      .container {
+        max-width: 900px;
+        margin: 30px auto;
+        padding: 20px;
+        background-color: #ffffff;
+        border-radius: 12px;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+      }
+
+      /* --- ヘッダー --- */
+      header {
+        text-align: center;
+        padding-bottom: 20px;
+        border-bottom: 3px solid #0056b3;
+        margin-bottom: 30px;
+      }
+
+      header h1 {
+        color: #0056b3;
+        font-size: 2.2em;
+        margin: 0;
+        font-weight: 700;
+      }
+
+      header p {
+        font-size: 1.1em;
+        color: #555;
+        margin-top: 10px;
+      }
+
+      /* --- セクション --- */
+      .section {
+        margin-bottom: 40px;
+      }
+
+      .section h2 {
+        font-size: 1.8em;
+        color: #0056b3;
+        border-left: 5px solid #007bff;
+        padding-left: 15px;
+        margin-bottom: 20px;
+      }
+
+      /* --- 会員プラン --- */
+      .plans {
+        display: flex;
+        gap: 25px;
+        justify-content: space-around;
+      }
+
+      .plan {
+        flex: 1;
+        padding: 25px;
+        border: 1px solid #e0e0e0;
+        border-radius: 10px;
+        background-color: #fdfdfd;
+        transition: transform 0.3s, box-shadow 0.3s;
+      }
+
+      .plan:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
+      }
+
+      .plan h3 {
+        margin-top: 0;
+        font-size: 1.4em;
+        color: #007bff;
+        display: flex;
+        align-items: center;
+      }
+
+      .plan h3::before {
+        content: "🔹";
+        margin-right: 10px;
+        font-size: 0.9em;
+      }
+
+      .plan p {
+        color: #444;
+        font-size: 1em;
+      }
+
+      .plan-corporate h3 {
+        color: #28a745;
+      }
+      .plan-corporate h3::before {
+        content: "⭐";
+        margin-right: 10px;
+      }
+
+      /* --- テーマテーブル --- */
+      .table-wrapper {
+        overflow-x: auto; /* スマホ表示で表がはみ出た場合にスクロールさせる */
+      }
+
+      table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 20px;
+        font-size: 0.95em;
+      }
+
+      th,
+      td {
+        padding: 15px;
+        text-align: left;
+        border-bottom: 1px solid #ddd;
+      }
+
+      thead th {
+        background-color: #0056b3;
+        color: white;
+        font-weight: 600;
+        text-align: center;
+      }
+
+      tbody tr {
+        transition: background-color 0.2s;
+      }
+
+      tbody tr:hover {
+        background-color: #e9f5ff;
+        cursor: pointer;
+      }
+
+      td:first-child {
+        text-align: center;
+        font-weight: bold;
+        color: #0056b3;
+      }
+
+      /* --- フッター --- */
+      footer {
+        text-align: center;
+        margin-top: 40px;
+        padding-top: 20px;
+        border-top: 1px solid #e0e0e0;
+        color: #888;
+        font-size: 0.9em;
+      }
+
+      /* --- レスポンシブ対応 --- */
+      @media (max-width: 768px) {
+        .container {
+          margin: 15px;
+          padding: 15px;
+        }
+
+        header h1 {
+          font-size: 1.8em;
+        }
+
+        .section h2 {
+          font-size: 1.5em;
+        }
+
+        .plans {
+          flex-direction: column;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <header>
+        <h1>ChemLinked Japan 有料会員メールマガジン</h1>
+        <p>法規制の最新動向を、その日のうちにあなたの元へ。</p>
+      </header>
+
+      <main>
+        <section class="section">
+          <h2>サービス概要</h2>
+          <p>
+            「ChemLinked Japan
+            有料会員メールマガジン」は、<strong>スタンダード会員以上</strong>の会員様を対象とした法規制変動に関する<strong>即時通知サービス</strong>です。ご登録いただいたテーマに関連する最新情報（記事）を、専用のメール形式で迅速にお届けします。
+          </p>
+        </section>
+
+        <section class="section">
+          <h2>会員プラン別 ご利用特典</h2>
+          <div class="plans">
+            <div class="plan plan-standard">
+              <h3>スタンダード会員</h3>
+              <p>
+                後述の15テーマの中から、お好きな<strong>1つ</strong>のテーマをご登録いただけます。専門分野の情報を深く、確実に入手したい方におすすめです。
+              </p>
+            </div>
+            <div class="plan plan-corporate">
+              <h3>コーポレート会員</h3>
+              <p>
+                <strong>全てのテーマから自由に</strong
+                >、かつ<strong>複数のテーマを同時に</strong>ご登録可能です。幅広い分野の規制情報を網羅的に把握する必要がある法人様に最適です。
+              </p>
+            </div>
+          </div>
+        </section>
+
+        <section class="section">
+          <h2>配信テーマ一覧</h2>
+          <p>
+            以下の表の行をクリックすると、テーマの登録をシミュレーションできます。
+          </p>
+          <div class="table-wrapper">
+            <table id="themeTable">
+              <thead>
+                <tr>
+                  <th>連番</th>
+                  <th>テーマ</th>
+                  <th>カバーする範囲</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>1</td>
+                  <td>既存・新規化学物質管理</td>
+                  <td>EU REACH、中国12号令、K-REACH…</td>
+                </tr>
+                <tr>
+                  <td>2</td>
+                  <td>危険・有害性化学物質管理</td>
+                  <td>
+                    中国591号令、化審法第一/二種特定化学物質、台湾地区毒性物質、PFAS管理…
+                  </td>
+                </tr>
+                <tr>
+                  <td>3</td>
+                  <td>環境汚染</td>
+                  <td>水汚染・大気汚染・オゾン層破壊など</td>
+                </tr>
+                <tr>
+                  <td>4</td>
+                  <td>労働安全衛生</td>
+                  <td>職場安全、労働者保護…</td>
+                </tr>
+                <tr>
+                  <td>5</td>
+                  <td>化学品輸出入</td>
+                  <td>通関手続き、PICの国内適用…</td>
+                </tr>
+                <tr>
+                  <td>6</td>
+                  <td>製品中有害物質の制限</td>
+                  <td>塗料中のVOCs・玩具中の有害物質…</td>
+                </tr>
+                <tr>
+                  <td>7</td>
+                  <td>GHS/CLP</td>
+                  <td>分類、ラベル、SDS…</td>
+                </tr>
+                <tr>
+                  <td>8</td>
+                  <td>RoHS</td>
+                  <td>電気電子製品中の有害物質…</td>
+                </tr>
+                <tr>
+                  <td>9</td>
+                  <td>食品接触材</td>
+                  <td>法規制、ネガティヴリスト、ポジティブリスト…</td>
+                </tr>
+                <tr>
+                  <td>10</td>
+                  <td>危険物・危険貨物</td>
+                  <td>陸路、空路、水路、鉄道輸送…</td>
+                </tr>
+                <tr>
+                  <td>11</td>
+                  <td>廃棄物・リサイクル</td>
+                  <td>拡大生産者責任…</td>
+                </tr>
+                <tr>
+                  <td>12</td>
+                  <td>化学品管理関連国際条約</td>
+                  <td>国際レベルの条約、制度のみ</td>
+                </tr>
+                <tr>
+                  <td>13</td>
+                  <td>麻薬、向精神物質</td>
+                  <td>その類似物質および前駆体も含む</td>
+                </tr>
+                <tr>
+                  <td>14</td>
+                  <td>化学兵器関連物質管理</td>
+                  <td>各国国内の関連法規制の変動</td>
+                </tr>
+                <tr>
+                  <td>15</td>
+                  <td>持続可能</td>
+                  <td>温室効果ガス、脱炭素…</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </section>
+      </main>
+
+      <footer>
+        <p>&copy; ChemLinked. All Rights Reserved.</p>
+      </footer>
+    </div>
+
+    <script>
+      // DOMが読み込まれたら実行
+      document.addEventListener("DOMContentLoaded", function () {
+        const table = document.getElementById("themeTable");
+        const rows = table
+          .getElementsByTagName("tbody")[0]
+          .getElementsByTagName("tr");
+
+        // 各行にクリックイベントを追加
+        for (let i = 0; i < rows.length; i++) {
+          rows[i].addEventListener("click", function () {
+            // 行からテーマ名を取得 (2番目のセル)
+            const themeName = this.cells[1].textContent;
+
+            // 確認のアラートを表示
+            alert(
+              "「" + themeName + "」を登録しますか？\n（これはデモ機能です）"
+            );
+          });
+        }
+      });
+    </script>
+  </body>
+</html>
