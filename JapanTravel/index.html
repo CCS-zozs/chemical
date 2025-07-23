@@ -1,72 +1,433 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>菠萝一家的暑期日本之旅</title>
     <style>
-        /* --- Google Fonts --- */
-        @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;500;700&family=Playfair+Display:wght@700&display=swap');
+      /* --- Google Fonts --- */
+      @import url("https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;500;700&family=Playfair+Display:wght@700&display=swap");
 
-        /* --- Global Styles --- */
-        :root {
-            --primary-color: #ff6347; /* Tomato */
-            --secondary-color: #4682b4; /* SteelBlue */
-            --background-color: #fdfaf6;
-            --text-color: #333;
-            --card-bg-color: #ffffff;
-            --header-bg-color: #f7f7f7;
-            --border-color: #e0e0e0;
-            --shadow-color: rgba(0, 0, 0, 0.08);
-        }
+      /* --- Global Styles --- */
+      :root {
+        --primary-color: #ff6347; /* Tomato */
+        --secondary-color: #4682b4; /* SteelBlue */
+        --background-color: #fdfaf6;
+        --text-color: #333;
+        --card-bg-color: #ffffff;
+        --header-bg-color: #f7f7f7;
+        --border-color: #e0e0e0;
+        --shadow-color: rgba(0, 0, 0, 0.08);
+      }
 
-        body {
-            font-family: 'Noto Sans SC', sans-serif;
-            margin: 0;
-            padding: 0;
-            background-color: var(--background-color);
-            color: var(--text-color);
-            line-height: 1.8;
-        }
+      body {
+        font-family: "Noto Sans SC", sans-serif;
+        margin: 0;
+        padding: 0;
+        background-color: var(--background-color);
+        color: var(--text-color);
+        line-height: 1.8;
+      }
 
-        .container {
-            max-width: 900px;
-            margin: 0 auto;
-            padding: 20px;
-        }
+      .container {
+        max-width: 900px;
+        margin: 0 auto;
+        padding: 20px;
+      }
 
-        /* --- Header --- */
-        .main-header {
-            text-align: center;
-            padding: 40px 20px;
-            border-bottom: 2px dashed var(--border-color);
-            margin-bottom: 40px;
-        }
+      /* --- Header --- */
+      .main-header {
+        text-align: center;
+        padding: 40px 20px;
+        border-bottom: 2px dashed var(--border-color);
+        margin-bottom: 40px;
+      }
 
+      .main-header h1 {
+        font-family: "Playfair Display", serif;
+        font-size: 3rem;
+        color: var(--primary-color);
+        margin: 0;
+        text-shadow: 2px 2px 4px var(--shadow-color);
+      }
+
+      .main-header p {
+        font-size: 1.1rem;
+        color: var(--secondary-color);
+        margin-top: 10px;
+      }
+
+      /* --- Itinerary Day Card --- */
+      .day-card {
+        background-color: var(--card-bg-color);
+        border-radius: 15px;
+        margin-bottom: 25px;
+        box-shadow: 0 8px 25px var(--shadow-color);
+        overflow: hidden;
+        transition: all 0.3s ease-in-out;
+      }
+
+      .day-header {
+        padding: 20px 25px;
+        cursor: pointer;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        background-color: var(--header-bg-color);
+        border-bottom: 1px solid var(--border-color);
+        transition: background-color 0.3s ease;
+      }
+
+      .day-header:hover {
+        background-color: #f0f0f0;
+      }
+
+      .day-header h2 {
+        margin: 0;
+        font-size: 1.5rem;
+        color: var(--secondary-color);
+      }
+
+      .day-header .date {
+        font-size: 0.9rem;
+        color: #888;
+        font-weight: 300;
+      }
+
+      .day-title-wrap {
+        display: flex;
+        flex-direction: column;
+      }
+
+      .toggle-icon {
+        font-size: 1.8rem;
+        font-weight: bold;
+        color: var(--primary-color);
+        transition: transform 0.4s ease;
+      }
+
+      .day-header.active .toggle-icon {
+        transform: rotate(45deg);
+      }
+
+      /* --- Day Content --- */
+      .day-content {
+        max-height: 0;
+        overflow: hidden;
+        transition: max-height 0.7s cubic-bezier(0.25, 0.46, 0.45, 0.94),
+          padding 0.5s ease;
+        padding: 0 30px;
+      }
+
+      .day-content h3 {
+        font-size: 1.2rem;
+        color: var(--primary-color);
+        border-bottom: 2px solid var(--secondary-color);
+        padding-bottom: 5px;
+        margin-top: 25px;
+        display: inline-block;
+      }
+
+      .day-content ul {
+        list-style-type: none;
+        padding-left: 0;
+      }
+
+      .day-content li {
+        position: relative;
+        padding-left: 25px;
+        margin-bottom: 10px;
+      }
+
+      .day-content li::before {
+        content: "🍍"; /* Pineapple icon */
+        position: absolute;
+        left: 0;
+        top: 0;
+        font-size: 1rem;
+      }
+
+      .day-content .icon-label {
+        font-weight: 500;
+        color: var(--secondary-color);
+        margin-right: 8px;
+      }
+
+      /* --- Responsive Design --- */
+      @media (max-width: 768px) {
         .main-header h1 {
-            font-family: 'Playfair Display', serif;
-            font-size: 3rem;
-            color: var(--primary-color);
-            margin: 0;
-            text-shadow: 2px 2px 4px var(--shadow-color);
+          font-size: 2.2rem;
         }
-        
-        .main-header p {
-            font-size: 1.1rem;
-            color: var(--secondary-color);
-            margin-top: 10px;
+        .day-header h2 {
+          font-size: 1.2rem;
         }
+        .container {
+          padding: 10px;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <header class="main-header">
+        <h1>菠萝一家的暑期日本之旅</h1>
+        <p>2025.07.31 - 2025.08.04 | 大阪 & 京都 5天4晚</p>
+      </header>
 
-        /* --- Itinerary Day Card --- */
-        .day-card {
-            background-color: var(--card-bg-color);
-            border-radius: 15px;
-            margin-bottom: 25px;
-            box-shadow: 0 8px 25px var(--shadow-color);
-            overflow: hidden;
-            transition: all 0.3s ease-in-out;
-        }
+      <div class="itinerary">
+        <div class="day-card">
+          <div class="day-header">
+            <div class="day-title-wrap">
+              <h2>Day 1: 抵达大阪，初探“浪速”风情</h2>
+              <span class="date">7月31日，周四</span>
+            </div>
+            <span class="toggle-icon">+</span>
+          </div>
+          <div class="day-content">
+            <h3>
+              <i class="fas fa-plane-arrival"></i> 上午 & 下午：出发与抵达
+            </h3>
+            <p>
+              <span class="icon-label">航班信息：</span>搭乘
+              <b>长龙航空 GJ8249 (09:50 - 13:25)</b>
+              从杭州萧山机场(T4)飞往大阪关西机场(T1)。
+            </p>
+            <p>
+              预计13:25抵达。办理入境和海关手续（约1-1.5小时），然后在机场购买并充值ICOCA交通卡。
+            </p>
 
-        .day-header {
-            padding: 20px 25px;
-            cursor
+            <h3><i class="fas fa-subway"></i> 下午：前往市区 & 酒店入住</h3>
+            <p>
+              <span class="icon-label">交通：</span
+              >约15:00，搭乘南海电铁“Rapi:t”号或机场急行线至【难波】站（约45分钟）。
+            </p>
+            <p>
+              <span class="icon-label">酒店入住：</span
+              >预计16:00左右抵达位于【难波】或【心斋桥】的酒店，办理入住，安放行李。
+            </p>
+
+            <h3><i class="fas fa-utensils"></i> 傍晚至深夜：道顿堀 & 心斋桥</h3>
+            <ul>
+              <li>
+                <b>道顿堀 (Dotonbori):</b>
+                稍作休整后，即可出门感受大阪的热情！漫步运河两岸，与格力高“跑跑人”合影。
+              </li>
+              <li>
+                <b>美食巡礼:</b>
+                品尝章鱼烧、大阪烧、金龙拉面等经典小吃作为晚餐。
+              </li>
+              <li>
+                <b>心斋桥筋商店街:</b>
+                尽情享受购物的乐趣，从药妆到潮流服饰一应俱全。
+              </li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="day-card">
+          <div class="day-header">
+            <div class="day-title-wrap">
+              <h2>Day 2: 大阪经典一日游</h2>
+              <span class="date">8月1日，周五</span>
+            </div>
+            <span class="toggle-icon">+</span>
+          </div>
+          <div class="day-content">
+            <h3><i class="fas fa-chess-rook"></i> 上午：大阪城天守阁</h3>
+            <ul>
+              <li><b>大阪城公园:</b> 乘坐地铁前往大阪的象征——大阪城。</li>
+              <li>
+                <b>天守阁:</b>
+                登上城顶，360度俯瞰大阪市的壮丽景色，了解丰臣秀吉的历史。
+              </li>
+            </ul>
+
+            <h3><i class="fas fa-microphone-alt"></i> 下午：怀旧新世界</h3>
+            <ul>
+              <li>
+                <b>新世界 & 通天阁:</b>
+                体验昭和时代的复古风情，登上通天阁，触摸幸运之神“比利肯”的脚底。
+              </li>
+              <li>
+                <b>午餐推荐:</b> 在新世界品尝地道的【炸串
+                (Kushikatsu)】，记得酱汁只能蘸一次哦！
+              </li>
+            </ul>
+
+            <h3><i class="fas fa-building"></i> 傍晚：梅田空中庭园</h3>
+            <ul>
+              <li>
+                <b>梅田蓝天大厦:</b>
+                前往繁华的梅田商业区，登上“空中庭园展望台”。
+              </li>
+              <li>
+                <b>璀璨夜景:</b>
+                欣赏被誉为“日本三大夜景”之一的大阪夜景，感受都市的浪漫。
+              </li>
+            </ul>
+            <hr />
+            <p>
+              <b>B计划：</b>
+              如果全家都是主题公园爱好者，可将全天安排给【日本环球影城
+              (USJ)】，与哈利波特、马里奥一起冒险！
+            </p>
+          </div>
+        </div>
+
+        <div class="day-card">
+          <div class="day-header">
+            <div class="day-title-wrap">
+              <h2>Day 3: 迁往京都，感受千年古都</h2>
+              <span class="date">8月2日，周六</span>
+            </div>
+            <span class="toggle-icon">+</span>
+          </div>
+          <div class="day-content">
+            <h3><i class="fas fa-train"></i> 上午：出发前往京都</h3>
+            <p>
+              在大阪酒店办理退房，从大阪站/新大阪站乘坐JR京都线前往京都（约30分钟）。
+            </p>
+            <p>
+              <span class="icon-label">住宿：</span
+              >推荐入住【京都站】附近（交通便利）或【祇园】区域（风情浓郁）的酒店或日式旅馆。
+            </p>
+
+            <h3><i class="fas fa-torii-gate"></i> 下午：伏见稻荷大社</h3>
+            <ul>
+              <li>
+                <b>千本鸟居:</b>
+                从京都站搭乘JR奈良线，仅需5分钟即可抵达。穿行在延绵不绝的朱红色鸟居隧道中，感受震撼与神秘。
+              </li>
+              <li>
+                <b>轻松徒步:</b>
+                建议沿山路向上走一小段，人会更少，风景也更幽静。
+              </li>
+            </ul>
+
+            <h3><i class="fas fa-umbrella-beach"></i> 傍晚：祇园 & 花见小路</h3>
+            <ul>
+              <li>
+                <b>古都风情:</b>
+                漫步在祇园的石板路上，欣赏传统的町屋建筑，这里是电影《艺伎回忆录》的取景地之一。
+              </li>
+              <li>
+                <b>邂逅艺伎:</b>
+                傍晚时分，如果运气好，可能会看到行色匆匆前往茶屋的艺伎或舞伎。
+              </li>
+              <li>
+                <b>晚餐推荐:</b> 在附近的先斗町品尝地道的京怀石料理或汤豆腐。
+              </li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="day-card">
+          <div class="day-header">
+            <div class="day-title-wrap">
+              <h2>Day 4: 京都经典文化巡礼</h2>
+              <span class="date">8月3日，周日</span>
+            </div>
+            <span class="toggle-icon">+</span>
+          </div>
+          <div class="day-content">
+            <h3><i class="fas fa-temple"></i> 上午：清水寺 & 古街漫步</h3>
+            <ul>
+              <li>
+                <b>清水寺:</b>
+                乘坐巴士前往，参观悬空的“清水舞台”，在此祈福并远眺京都市景。
+              </li>
+              <li>
+                <b>和服体验:</b>
+                在清水寺周边的和服店，为家人换上漂亮的浴衣或和服，在古色古香的二年坂、三年坂石板路上留下美丽的回忆。
+              </li>
+            </ul>
+
+            <h3><i class="fas fa-gopuram"></i> 下午：金阁寺 & 岚山</h3>
+            <ul>
+              <li>
+                <b>金阁寺 (鹿苑寺):</b>
+                欣赏贴满金箔的舍利殿在阳光下和湖中倒影交相辉映的绝美景致。
+              </li>
+              <li>
+                <b>岚山竹林:</b>
+                若时间充裕，可前往岚山，漫步于静谧的竹林小径，感受清风拂面的惬意。
+              </li>
+            </ul>
+
+            <h3><i class="fas fa-fish"></i> 傍晚：锦市场美食探索</h3>
+            <ul>
+              <li>
+                <b>京都的厨房:</b>
+                在关门前探访锦市场，这里是海鲜、京酱菜、和果子等各种地道美食的聚集地，可以边走边吃，感受市井气息。
+              </li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="day-card">
+          <div class="day-header">
+            <div class="day-title-wrap">
+              <h2>Day 5: 从容返程，满载而归</h2>
+              <span class="date">8月4日，周一</span>
+            </div>
+            <span class="toggle-icon">+</span>
+          </div>
+          <div class="day-content">
+            <h3><i class="fas fa-coffee"></i> 上午：京都的最后时光</h3>
+            <p>
+              今天是返程日，行程安排需轻松从容。您可以在酒店享用一顿丰盛的早餐，整理行李。
+            </p>
+            <p>
+              如果时间充裕，可以到酒店附近或京都站内的商店逛逛，购买一些忘记的手信。无需安排需要耗时较长的景点游览。
+            </p>
+
+            <h3>
+              <i class="fas fa-plane-departure"></i> 上午末 & 下午：前往机场 &
+              返航
+            </h3>
+            <p>
+              <span class="icon-label">交通准备：</span>请在
+              <b>10:00</b> 左右从酒店出发，前往京都站。
+            </p>
+            <p>
+              <span class="icon-label">机场交通：</span>从京都站乘坐
+              <b>JR“Haruka”号特急列车</b>
+              直达关西国际机场（约80分钟），确保在11:30前抵达机场，为办理登机和安检留出充足时间。
+            </p>
+            <p>
+              <span class="icon-label">航班信息：</span>搭乘
+              <b>长龙航空 GJ8250 (14:25 - 16:10)</b>
+              返回杭州萧山机场(T4)，结束愉快的菠萝一家关西之旅！
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      document.addEventListener("DOMContentLoaded", function () {
+        const headers = document.querySelectorAll(".day-header");
+
+        headers.forEach((header) => {
+          header.addEventListener("click", function () {
+            // Toggle active class on the header
+            this.classList.toggle("active");
+
+            // The content is the next element sibling
+            const content = this.nextElementSibling;
+
+            // Toggle max-height to create the accordion effect
+            if (content.style.maxHeight) {
+              content.style.maxHeight = null;
+              content.style.padding = "0 30px"; // Collapse padding
+            } else {
+              // Set max-height to the scroll height to expand fully
+              content.style.maxHeight = content.scrollHeight + "px";
+              content.style.padding = "25px 30px"; // Expand padding
+            }
+          });
+        });
+      });
+    </script>
+  </body>
+</html>
