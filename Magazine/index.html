@@ -15,6 +15,7 @@
       :root {
         --primary-color: #005f73;
         --secondary-color: #0a9396;
+        --accent-color: #ee9b00;
         --background-color: #fdfbf7;
         --card-background: #ffffff;
         --text-color: #212529;
@@ -136,14 +137,50 @@
       }
 
       .plan-corporate {
-        border-top-color: #ee9b00;
+        border-top-color: var(--accent-color);
       }
       .plan-corporate h3 {
-        color: #ee9b00;
+        color: var(--accent-color);
       }
       .plan-corporate h3::before {
         background-image: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="%23ee9b00"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>');
       }
+
+      /* --- ★★★CTA(行動喚起)セクション★★★ --- */
+      .cta-section {
+        background-color: #eef7f7;
+        text-align: center;
+        padding: 40px 30px;
+        border-radius: var(--border-radius);
+        margin: 50px 0;
+      }
+
+      .cta-section h3 {
+        font-size: 1.5em;
+        color: var(--primary-color);
+        margin-top: 0;
+        margin-bottom: 20px;
+        font-weight: 700;
+      }
+
+      .cta-button {
+        display: inline-block;
+        background-color: var(--accent-color);
+        color: var(--card-background);
+        padding: 14px 40px;
+        border-radius: 50px;
+        text-decoration: none;
+        font-weight: 700;
+        font-size: 1.1em;
+        transition: transform 0.2s, box-shadow 0.2s;
+        box-shadow: 0 4px 15px rgba(238, 155, 0, 0.3);
+      }
+
+      .cta-button:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 6px 20px rgba(238, 155, 0, 0.4);
+      }
+      /* --- ★★★ここまで★★★ --- */
 
       /* --- テーマテーブル --- */
       .table-wrapper {
@@ -227,6 +264,17 @@
         .plans {
           grid-template-columns: 1fr;
         }
+
+        .cta-section {
+          padding: 30px 20px;
+        }
+        .cta-section h3 {
+          font-size: 1.3em;
+        }
+        .cta-button {
+          padding: 12px 30px;
+          font-size: 1em;
+        }
       }
     </style>
   </head>
@@ -265,6 +313,17 @@
           </div>
         </section>
 
+        <section class="cta-section">
+          <h3>有料会員サービスで、規制対応をさらに万全に</h3>
+          <a
+            href="https://jp.chemlinked.com/membership"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="cta-button"
+          >
+            会員プランの詳細・ご購入はこちら
+          </a>
+        </section>
         <section class="section">
           <h2>配信テーマ一覧</h2>
           <div class="table-wrapper">
