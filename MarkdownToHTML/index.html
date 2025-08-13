@@ -41,19 +41,18 @@
         line-height: 1.6;
       }
 
-      /* --- 列表样式修复 --- */
+      /* 列表样式 */
       .rendered-html ul,
       .rendered-html ol {
         list-style-position: inside;
         padding-left: 1em;
         margin-bottom: 1em;
       }
-      /* 关键修复：强制恢复被 Tailwind CSS 重置的列表标记 */
       .rendered-html ul {
-        list-style-type: disc; /* 无序列表使用圆点 */
+        list-style-type: disc;
       }
       .rendered-html ol {
-        list-style-type: decimal; /* 有序列表使用数字 */
+        list-style-type: decimal;
       }
       .rendered-html ul ul,
       .rendered-html ol ol,
@@ -64,7 +63,6 @@
       .rendered-html li {
         margin-bottom: 0.5em;
       }
-      /* --- 列表样式修复结束 --- */
 
       .rendered-html blockquote {
         border-left: 4px solid #a0aec0;
@@ -112,19 +110,22 @@
       .rendered-html a:hover {
         text-decoration: underline;
       }
+      /* 激活标签的样式 */
+      .tab-active {
+        background-color: white;
+        box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+      }
     </style>
   </head>
   <body class="bg-gray-100 font-sans">
     <div class="container mx-auto p-4">
-      <!-- 标题区域 -->
       <header class="text-center mb-8">
         <h1 class="text-4xl font-bold text-gray-800">Markdown 实时转换器</h1>
         <p class="text-gray-600 mt-2">
-          在左侧输入 Markdown，在右侧即时查看 HTML 预览。
+          在左侧输入 Markdown，在右侧即时查看 HTML 预览或源码。
         </p>
       </header>
 
-      <!-- 主内容区域：左右分栏 -->
       <main class="flex flex-col md:flex-row gap-4 h-[calc(100vh-150px)]">
         <!-- 左侧：Markdown 输入 -->
         <div class="w-full md:w-1/2 h-full flex flex-col">
@@ -138,23 +139,64 @@
           ></textarea>
         </div>
 
-        <!-- 右侧：HTML 预览 -->
+        <!-- 右侧：输出区域 (预览/HTML源码) -->
         <div class="w-full md:w-1/2 h-full flex flex-col">
-          <h2 class="text-xl font-semibold mb-2 text-gray-700">HTML 预览</h2>
-          <div
-            id="html-output"
-            class="w-full h-full p-4 border border-gray-300 rounded-lg shadow-sm bg-white overflow-y-auto rendered-html"
-          ></div>
+          <!-- 新增：切换标签 -->
+          <div class="flex justify-between items-center mb-2">
+            <div class="flex space-x-1 rounded-lg bg-gray-200 p-1">
+              <button
+                id="preview-btn"
+                class="px-3 py-1 text-sm font-medium rounded-md transition-colors"
+              >
+                预览
+              </button>
+              <button
+                id="source-btn"
+                class="px-3 py-1 text-sm font-medium rounded-md transition-colors"
+              >
+                HTML
+              </button>
+            </div>
+          </div>
+
+          <!-- 输出内容的容器 -->
+          <div class="relative w-full h-full">
+            <!-- HTML 预览 -->
+            <div
+              id="html-output"
+              class="w-full h-full p-4 border border-gray-300 rounded-lg shadow-sm bg-white overflow-y-auto rendered-html"
+            ></div>
+
+            <!-- 新增：HTML 源码视图 -->
+            <div id="source-view" class="hidden w-full h-full relative">
+              <textarea
+                id="html-source-output"
+                readonly
+                class="w-full h-full p-4 border border-gray-300 rounded-lg shadow-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition duration-150 ease-in-out resize-none bg-gray-800 text-white font-mono text-sm"
+              ></textarea>
+              <button
+                id="copy-btn"
+                class="absolute top-3 right-3 bg-gray-600 hover:bg-gray-500 text-white text-xs font-bold py-1 px-2 rounded transition-colors"
+              >
+                复制
+              </button>
+            </div>
+          </div>
         </div>
       </main>
     </div>
 
     <script>
-      // 获取 DOM 元素
+      // --- DOM 元素获取 ---
       const markdownInput = document.getElementById("markdown-input");
       const htmlOutput = document.getElementById("html-output");
+      // 新增元素
+      const previewBtn = document.getElementById("preview-btn");
+      const sourceBtn = document.getElementById("source-btn");
+      const sourceView = document.getElementById("source-view");
+      const htmlSourceOutput = document.getElementById("html-source-output");
+      const copyBtn = document.getElementById("copy-btn");
 
-      // 设置一个默认的 Markdown 文本，作为示例
       const defaultMarkdown = `
 # 欢迎使用 Markdown 转换器!
 
@@ -162,8 +204,8 @@
 
 ## 功能特性
 - **实时预览**: 你输入的内容会立刻被转换。
-- **纯客户端**: 所有转换都在你的浏览器中完成，无需服务器。
-- **样式化输出**: 预览窗口的样式经过优化，便于阅读。
+- **源码切换**: 点击右上角的 "HTML" 标签可以查看和复制源码。
+- **纯客户端**: 所有转换都在你的浏览器中完成。
 
 ### 示例
 
@@ -171,12 +213,9 @@
 * 无序列表项 1
 * 无序列表项 2
     * 嵌套项
-        * 更深层的嵌套
 
 1.  有序列表项 1
 2.  有序列表项 2
-    1. 嵌套的有序列表
-    2. 另一个嵌套项
 
 #### 代码块
 \`\`\`javascript
@@ -186,37 +225,60 @@ function greet() {
 }
 greet();
 \`\`\`
-
-#### 引用
-> “Stay hungry, stay foolish.” - Steve Jobs
-
-#### 表格
-| 功能 | 支持 |
-| --- | --- |
-| 标题 | ✔ |
-| 列表 | ✔ |
-| 代码 | ✔ |
-
-试着编辑这段文本，看看会发生什么！
         `;
 
-      // 初始化函数
-      function init() {
-        // 设置默认值
-        markdownInput.value = defaultMarkdown.trim();
-        // 首次加载时转换一次
-        convertMarkdown();
-        // 监听输入事件
-        markdownInput.addEventListener("input", convertMarkdown);
-      }
+      // --- 函数定义 ---
 
       // 转换 Markdown 的函数
       function convertMarkdown() {
         const markdownText = markdownInput.value;
-        // 使用 marked.js 库进行转换
         const htmlText = marked.parse(markdownText);
-        // 将转换后的 HTML 渲染到输出区域
+        // 同时更新预览和源码两个区域
         htmlOutput.innerHTML = htmlText;
+        htmlSourceOutput.value = htmlText;
+      }
+
+      // 更新视图（预览/源码）的函数
+      function updateView(viewToShow) {
+        if (viewToShow === "preview") {
+          htmlOutput.classList.remove("hidden");
+          sourceView.classList.add("hidden");
+          previewBtn.classList.add("tab-active");
+          sourceBtn.classList.remove("tab-active");
+        } else {
+          // 'source'
+          htmlOutput.classList.add("hidden");
+          sourceView.classList.remove("hidden");
+          previewBtn.classList.remove("tab-active");
+          sourceBtn.classList.add("tab-active");
+        }
+      }
+
+      // 复制到剪贴板的函数
+      function copySourceCode() {
+        htmlSourceOutput.select();
+        // 为了更好的兼容性，使用 document.execCommand
+        document.execCommand("copy");
+
+        // 提供视觉反馈
+        const originalText = copyBtn.textContent;
+        copyBtn.textContent = "已复制!";
+        setTimeout(() => {
+          copyBtn.textContent = originalText;
+        }, 2000);
+      }
+
+      // 初始化函数
+      function init() {
+        markdownInput.value = defaultMarkdown.trim();
+        convertMarkdown();
+        updateView("preview"); // 默认显示预览
+
+        // --- 事件监听 ---
+        markdownInput.addEventListener("input", convertMarkdown);
+        previewBtn.addEventListener("click", () => updateView("preview"));
+        sourceBtn.addEventListener("click", () => updateView("source"));
+        copyBtn.addEventListener("click", copySourceCode);
       }
 
       // 页面加载完成后执行初始化
