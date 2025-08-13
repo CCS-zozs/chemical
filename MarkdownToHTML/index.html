@@ -40,14 +40,32 @@
         margin-bottom: 1em;
         line-height: 1.6;
       }
+
+      /* --- 列表样式修复 --- */
       .rendered-html ul,
       .rendered-html ol {
-        margin-left: 1.5em;
+        list-style-position: inside;
+        padding-left: 1em;
         margin-bottom: 1em;
       }
-      .rendered-html li {
-        margin-bottom: 0.25em;
+      /* 关键修复：强制恢复被 Tailwind CSS 重置的列表标记 */
+      .rendered-html ul {
+        list-style-type: disc; /* 无序列表使用圆点 */
       }
+      .rendered-html ol {
+        list-style-type: decimal; /* 有序列表使用数字 */
+      }
+      .rendered-html ul ul,
+      .rendered-html ol ol,
+      .rendered-html ul ol,
+      .rendered-html ol ul {
+        margin-left: 1.5em;
+      }
+      .rendered-html li {
+        margin-bottom: 0.5em;
+      }
+      /* --- 列表样式修复结束 --- */
+
       .rendered-html blockquote {
         border-left: 4px solid #a0aec0;
         padding-left: 1em;
@@ -153,9 +171,12 @@
 * 无序列表项 1
 * 无序列表项 2
     * 嵌套项
+        * 更深层的嵌套
 
 1.  有序列表项 1
 2.  有序列表项 2
+    1. 嵌套的有序列表
+    2. 另一个嵌套项
 
 #### 代码块
 \`\`\`javascript
