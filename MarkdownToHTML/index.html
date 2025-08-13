@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Markdown 转 HTML 实时转换器</title>
+
+    <!-- 引入 Tailwind CSS for styling -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- 引入 marked.js for Markdown to HTML conversion -->
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+
+    <style>
+      /* 自定义样式，用于美化渲染后的 HTML 输出 */
+      .rendered-html h1,
+      .rendered-html h2,
+      .rendered-html h3,
+      .rendered-html h4,
+      .rendered-html h5,
+      .rendered-html h6 {
+        border-bottom: 1px solid #e2e8f0;
+        padding-bottom: 0.3em;
+        margin-top: 1.5em;
+        margin-bottom: 1em;
+      }
+      .rendered-html h1 {
+        font-size: 2em;
+        font-weight: 600;
+      }
+      .rendered-html h2 {
+        font-size: 1.5em;
+        font-weight: 600;
+      }
+      .rendered-html h3 {
+        font-size: 1.25em;
+        font-weight: 600;
+      }
+      .rendered-html p {
+        margin-bottom: 1em;
+        line-height: 1.6;
+      }
+      .rendered-html ul,
+      .rendered-html ol {
+        margin-left: 1.5em;
+        margin-bottom: 1em;
+      }
+      .rendered-html li {
+        margin-bottom: 0.25em;
+      }
+      .rendered-html blockquote {
+        border-left: 4px solid #a0aec0;
+        padding-left: 1em;
+        margin-left: 0;
+        color: #4a5568;
+        font-style: italic;
+      }
+      .rendered-html pre {
+        background-color: #1a202c;
+        color: #e2e8f0;
+        padding: 1em;
+        border-radius: 0.5rem;
+        overflow-x: auto;
+        margin-bottom: 1em;
+      }
+      .rendered-html code {
+        background-color: #edf2f7;
+        color: #2d3748;
+        padding: 0.2em 0.4em;
+        border-radius: 0.25rem;
+        font-family: monospace;
+      }
+      .rendered-html pre code {
+        background-color: transparent;
+        padding: 0;
+      }
+      .rendered-html table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-bottom: 1em;
+      }
+      .rendered-html th,
+      .rendered-html td {
+        border: 1px solid #cbd5e0;
+        padding: 0.5em 0.75em;
+      }
+      .rendered-html th {
+        background-color: #f7fafc;
+      }
+      .rendered-html a {
+        color: #3182ce;
+        text-decoration: none;
+      }
+      .rendered-html a:hover {
+        text-decoration: underline;
+      }
+    </style>
+  </head>
+  <body class="bg-gray-100 font-sans">
+    <div class="container mx-auto p-4">
+      <!-- 标题区域 -->
+      <header class="text-center mb-8">
+        <h1 class="text-4xl font-bold text-gray-800">Markdown 实时转换器</h1>
+        <p class="text-gray-600 mt-2">
+          在左侧输入 Markdown，在右侧即时查看 HTML 预览。
+        </p>
+      </header>
+
+      <!-- 主内容区域：左右分栏 -->
+      <main class="flex flex-col md:flex-row gap-4 h-[calc(100vh-150px)]">
+        <!-- 左侧：Markdown 输入 -->
+        <div class="w-full md:w-1/2 h-full flex flex-col">
+          <h2 class="text-xl font-semibold mb-2 text-gray-700">
+            Markdown 输入
+          </h2>
+          <textarea
+            id="markdown-input"
+            class="w-full h-full p-4 border border-gray-300 rounded-lg shadow-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition duration-150 ease-in-out resize-none bg-white"
+            placeholder="在这里输入你的 Markdown..."
+          ></textarea>
+        </div>
+
+        <!-- 右侧：HTML 预览 -->
+        <div class="w-full md:w-1/2 h-full flex flex-col">
+          <h2 class="text-xl font-semibold mb-2 text-gray-700">HTML 预览</h2>
+          <div
+            id="html-output"
+            class="w-full h-full p-4 border border-gray-300 rounded-lg shadow-sm bg-white overflow-y-auto rendered-html"
+          ></div>
+        </div>
+      </main>
+    </div>
+
+    <script>
+      // 获取 DOM 元素
+      const markdownInput = document.getElementById("markdown-input");
+      const htmlOutput = document.getElementById("html-output");
+
+      // 设置一个默认的 Markdown 文本，作为示例
+      const defaultMarkdown = `
+# 欢迎使用 Markdown 转换器!
+
+这是一个实时的 Markdown 编辑器。
+
+## 功能特性
+- **实时预览**: 你输入的内容会立刻被转换。
+- **纯客户端**: 所有转换都在你的浏览器中完成，无需服务器。
+- **样式化输出**: 预览窗口的样式经过优化，便于阅读。
+
+### 示例
+
+#### 列表
+* 无序列表项 1
+* 无序列表项 2
+    * 嵌套项
+
+1.  有序列表项 1
+2.  有序列表项 2
+
+#### 代码块
+\`\`\`javascript
+// 你甚至可以写代码！
+function greet() {
+    console.log("Hello, Markdown!");
+}
+greet();
+\`\`\`
+
+#### 引用
+> “Stay hungry, stay foolish.” - Steve Jobs
+
+#### 表格
+| 功能 | 支持 |
+| --- | --- |
+| 标题 | ✔ |
+| 列表 | ✔ |
+| 代码 | ✔ |
+
+试着编辑这段文本，看看会发生什么！
+        `;
+
+      // 初始化函数
+      function init() {
+        // 设置默认值
+        markdownInput.value = defaultMarkdown.trim();
+        // 首次加载时转换一次
+        convertMarkdown();
+        // 监听输入事件
+        markdownInput.addEventListener("input", convertMarkdown);
+      }
+
+      // 转换 Markdown 的函数
+      function convertMarkdown() {
+        const markdownText = markdownInput.value;
+        // 使用 marked.js 库进行转换
+        const htmlText = marked.parse(markdownText);
+        // 将转换后的 HTML 渲染到输出区域
+        htmlOutput.innerHTML = htmlText;
+      }
+
+      // 页面加载完成后执行初始化
+      document.addEventListener("DOMContentLoaded", init);
+    </script>
+  </body>
+</html>
