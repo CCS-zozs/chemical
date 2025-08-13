@@ -1,0 +1,517 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <title>中国公积金贷款计算器 - 支持提前还款计算</title>
+    <style>
+      body {
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+          "Helvetica Neue", Arial, sans-serif;
+        line-height: 1.6;
+        margin: 20px;
+        background-color: #f4f7f9;
+        color: #333;
+      }
+      .container {
+        max-width: 600px;
+        margin: auto;
+        padding: 20px;
+        border: 1px solid #ddd;
+        border-radius: 8px;
+        background-color: #fff;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+      }
+      h1,
+      h2 {
+        text-align: center;
+        color: #0056b3;
+      }
+      .form-group {
+        margin-bottom: 18px;
+      }
+      label {
+        display: block;
+        margin-bottom: 6px;
+        font-weight: bold;
+      }
+      input[type="number"],
+      select {
+        width: 100%;
+        padding: 10px;
+        box-sizing: border-box;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        font-size: 1em;
+      }
+      button {
+        width: 100%;
+        padding: 12px;
+        background-color: #007bff;
+        color: white;
+        border: none;
+        cursor: pointer;
+        border-radius: 4px;
+        font-size: 1.1em;
+        transition: background-color 0.3s;
+      }
+      button:hover {
+        background-color: #0056b3;
+      }
+      #results {
+        margin-top: 20px;
+        padding: 15px;
+        background-color: #e9f5ff;
+        border: 1px solid #b3d7ff;
+        border-radius: 4px;
+      }
+      #results p {
+        margin: 8px 0;
+        font-size: 1.1em;
+      }
+      #results p strong {
+        color: #0056b3;
+      }
+      small {
+        color: #666;
+      }
+      #prepaymentSection {
+        background-color: #f8f9fa;
+        padding: 15px;
+        border-radius: 6px;
+        border: 1px solid #e9ecef;
+        margin-top: 10px;
+      }
+      #prepaymentResults {
+        background-color: #e8f5e8;
+        border: 1px solid #c3e6cb;
+      }
+      #prepaymentResults h3 {
+        color: #155724;
+        margin-top: 0;
+      }
+      input[type="checkbox"] {
+        margin-right: 8px;
+        transform: scale(1.2);
+      }
+      .checkbox-label {
+        display: flex;
+        align-items: center;
+        font-weight: bold;
+        margin-bottom: 10px;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <h1>中国公积金贷款计算器</h1>
+      <p style="text-align: center; color: #555">
+        自由设定贷款年限，支持提前还款计算，精准规划您的还款方案。
+      </p>
+
+      <div class="form-group">
+        <label for="loanAmount">贷款总额 (元):</label>
+        <input type="number" id="loanAmount" placeholder="例如: 1000000" />
+      </div>
+
+      <div class="form-group">
+        <label for="loanTerm">贷款年限 (1-30年):</label>
+        <input
+          type="number"
+          id="loanTerm"
+          value="30"
+          min="1"
+          max="30"
+          oninput="updateInterestRate()"
+        />
+        <small>请输入1至30之间的整数年限。</small>
+      </div>
+
+      <div class="form-group">
+        <label for="interestRate">贷款年利率 (%):</label>
+        <input
+          type="number"
+          id="interestRate"
+          step="0.001"
+          placeholder="请填写年利率"
+        />
+        <small
+          >提示：计算器会根据年限自动填充首套房建议利率，可自行修改。</small
+        >
+      </div>
+
+      <div class="form-group">
+        <label for="repaymentMethod">还款方式:</label>
+        <select id="repaymentMethod">
+          <option value="equal-installments">等额本息</option>
+          <option value="equal-principal">等额本金</option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label class="checkbox-label">
+          <input type="checkbox" id="enablePrepayment" onchange="togglePrepayment()">
+          计算提前还款
+        </label>
+      </div>
+
+      <div id="prepaymentSection" style="display: none;">
+        <div class="form-group">
+          <label for="prepaymentMonth">第几个月提前还款:</label>
+          <input type="number" id="prepaymentMonth" min="1" placeholder="例如: 24 (第24个月)" />
+          <small>请输入在第几个月进行提前还款。</small>
+        </div>
+
+        <div class="form-group">
+          <label for="prepaymentAmount">提前还款金额 (元):</label>
+          <input type="number" id="prepaymentAmount" placeholder="例如: 100000" />
+          <small>请输入提前还款的金额。</small>
+        </div>
+
+        <div class="form-group">
+          <label for="prepaymentType">提前还款方式:</label>
+          <select id="prepaymentType">
+            <option value="reduce-term">缩短还款期限</option>
+            <option value="reduce-payment">减少月供金额</option>
+          </select>
+        </div>
+      </div>
+
+      <button onclick="calculate()">开始计算</button>
+
+      <div id="results">
+        <h2>计算结果</h2>
+        <div id="originalResults">
+          <h3>原始贷款计划</h3>
+          <p><strong>每月月供:</strong> <span id="monthlyPayment">-</span></p>
+          <p><strong>利息总额:</strong> <span id="totalInterest">-</span></p>
+          <p><strong>还款总额:</strong> <span id="totalRepayment">-</span></p>
+        </div>
+        
+        <div id="prepaymentResults" style="display: none;">
+          <h3>提前还款后</h3>
+          <p><strong>提前还款时剩余本金:</strong> <span id="remainingPrincipal">-</span></p>
+          <p><strong>提前还款后新月供:</strong> <span id="newMonthlyPayment">-</span></p>
+          <p><strong>剩余还款期数:</strong> <span id="remainingMonths">-</span></p>
+          <p><strong>节省利息总额:</strong> <span id="savedInterest">-</span></p>
+          <p><strong>提前还款后总还款额:</strong> <span id="newTotalRepayment">-</span></p>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      function togglePrepayment() {
+        const checkbox = document.getElementById("enablePrepayment");
+        const section = document.getElementById("prepaymentSection");
+        const results = document.getElementById("prepaymentResults");
+        
+        if (checkbox.checked) {
+          section.style.display = "block";
+        } else {
+          section.style.display = "none";
+          results.style.display = "none";
+        }
+      }
+
+      function updateInterestRate() {
+        const loanTermInput = document.getElementById("loanTerm");
+        const interestRateInput = document.getElementById("interestRate");
+        let years = parseInt(loanTermInput.value, 10);
+
+        if (isNaN(years)) {
+          interestRateInput.value = "";
+          return;
+        }
+
+        // 限制输入范围
+        if (years > 30) loanTermInput.value = 30;
+        if (years < 1 && loanTermInput.value !== "") loanTermInput.value = 1;
+        years = parseInt(loanTermInput.value, 10);
+
+        if (years > 0 && years <= 5) {
+          interestRateInput.value = 2.1;
+        } else if (years > 5) {
+          interestRateInput.value = 2.6;
+        } else {
+          interestRateInput.value = "";
+        }
+      }
+
+      function calculate() {
+        const principal = parseFloat(
+          document.getElementById("loanAmount").value
+        );
+        const annualRate = parseFloat(
+          document.getElementById("interestRate").value
+        );
+        const years = parseInt(document.getElementById("loanTerm").value);
+        const method = document.getElementById("repaymentMethod").value;
+        const enablePrepayment = document.getElementById("enablePrepayment").checked;
+
+        if (
+          isNaN(principal) ||
+          isNaN(annualRate) ||
+          isNaN(years) ||
+          principal <= 0 ||
+          annualRate <= 0 ||
+          years <= 0
+        ) {
+          alert("请输入有效的贷款金额、利率和年限。");
+          return;
+        }
+
+        const monthlyRate = annualRate / 100 / 12;
+        const months = years * 12;
+        
+        // 计算原始贷款方案
+        const originalLoan = calculateOriginalLoan(principal, monthlyRate, months, method);
+        displayOriginalResults(originalLoan);
+
+        // 如果启用提前还款，计算提前还款方案
+        if (enablePrepayment) {
+          const prepaymentMonth = parseInt(document.getElementById("prepaymentMonth").value);
+          const prepaymentAmount = parseFloat(document.getElementById("prepaymentAmount").value);
+          const prepaymentType = document.getElementById("prepaymentType").value;
+
+          if (isNaN(prepaymentMonth) || isNaN(prepaymentAmount) || 
+              prepaymentMonth <= 0 || prepaymentAmount <= 0 || 
+              prepaymentMonth >= months) {
+            alert("请输入有效的提前还款月份和金额。");
+            return;
+          }
+
+          const prepaymentResult = calculatePrepayment(
+            principal, monthlyRate, months, method,
+            prepaymentMonth, prepaymentAmount, prepaymentType, originalLoan
+          );
+          
+          displayPrepaymentResults(prepaymentResult);
+        }
+      }
+
+      function calculateOriginalLoan(principal, monthlyRate, months, method) {
+        let monthlyPayment, totalInterest, totalRepayment;
+
+        if (method === "equal-installments") {
+          const power = Math.pow(1 + monthlyRate, months);
+          monthlyPayment = (principal * (monthlyRate * power)) / (power - 1);
+          totalRepayment = monthlyPayment * months;
+          totalInterest = totalRepayment - principal;
+        } else {
+          // equal-principal
+          let firstMonthPayment = principal / months + principal * monthlyRate;
+          const monthlyDecrease = (principal / months) * monthlyRate;
+          totalInterest = ((months + 1) * principal * monthlyRate) / 2;
+          totalRepayment = principal + totalInterest;
+          monthlyPayment = firstMonthPayment; // 用于显示
+        }
+
+        return {
+          monthlyPayment,
+          totalInterest,
+          totalRepayment,
+          method
+        };
+      }
+
+      function calculatePrepayment(principal, monthlyRate, totalMonths, method, 
+                                 prepaymentMonth, prepaymentAmount, prepaymentType, originalLoan) {
+        
+        // 计算提前还款时的剩余本金
+        let remainingPrincipal = calculateRemainingPrincipal(
+          principal, monthlyRate, totalMonths, method, prepaymentMonth
+        );
+
+        // 检查提前还款金额是否超过剩余本金
+        if (prepaymentAmount >= remainingPrincipal) {
+          alert("提前还款金额不能超过剩余本金！");
+          return null;
+        }
+
+        // 提前还款后的新本金
+        const newPrincipal = remainingPrincipal - prepaymentAmount;
+        const remainingMonths = totalMonths - prepaymentMonth;
+
+        let newMonthlyPayment;
+        let finalRemainingMonths = remainingMonths;
+
+        if (prepaymentType === "reduce-term") {
+          // 保持月供不变，缩短期限
+          newMonthlyPayment = originalLoan.monthlyPayment;
+          if (method === "equal-installments") {
+            // 计算新的还款期数
+            finalRemainingMonths = Math.ceil(
+              Math.log(1 + (newPrincipal * monthlyRate) / newMonthlyPayment) / 
+              Math.log(1 + monthlyRate)
+            );
+          } else {
+            // 等额本金，重新计算期数
+            finalRemainingMonths = Math.ceil(newPrincipal / (newMonthlyPayment - newPrincipal * monthlyRate));
+          }
+        } else {
+          // 保持期限不变，减少月供
+          if (method === "equal-installments") {
+            const power = Math.pow(1 + monthlyRate, remainingMonths);
+            newMonthlyPayment = (newPrincipal * (monthlyRate * power)) / (power - 1);
+          } else {
+            // 等额本金，重新计算首月月供
+            newMonthlyPayment = newPrincipal / remainingMonths + newPrincipal * monthlyRate;
+          }
+        }
+
+        // 计算节省的利息
+        const originalRemainingInterest = calculateRemainingInterest(
+          principal, monthlyRate, totalMonths, method, prepaymentMonth
+        );
+        
+        const newTotalInterest = calculateNewTotalInterest(
+          newPrincipal, monthlyRate, finalRemainingMonths, method
+        );
+
+        const savedInterest = originalRemainingInterest - newTotalInterest;
+        
+        // 计算新的总还款额（包括已还的+提前还款+剩余还款）
+        const paidAmount = calculatePaidAmount(principal, monthlyRate, totalMonths, method, prepaymentMonth);
+        const newTotalRepayment = paidAmount + prepaymentAmount + newTotalInterest + newPrincipal;
+
+        return {
+          remainingPrincipal,
+          newMonthlyPayment,
+          remainingMonths: finalRemainingMonths,
+          savedInterest,
+          newTotalRepayment,
+          method
+        };
+      }
+
+      function calculateRemainingPrincipal(principal, monthlyRate, totalMonths, method, currentMonth) {
+        if (method === "equal-installments") {
+          const power = Math.pow(1 + monthlyRate, totalMonths);
+          const monthlyPayment = (principal * (monthlyRate * power)) / (power - 1);
+          
+          let remainingPrincipal = principal;
+          for (let i = 1; i <= currentMonth; i++) {
+            const interestPayment = remainingPrincipal * monthlyRate;
+            const principalPayment = monthlyPayment - interestPayment;
+            remainingPrincipal -= principalPayment;
+          }
+          return remainingPrincipal;
+        } else {
+          // 等额本金
+          const monthlyPrincipal = principal / totalMonths;
+          return principal - (monthlyPrincipal * currentMonth);
+        }
+      }
+
+      function calculateRemainingInterest(principal, monthlyRate, totalMonths, method, currentMonth) {
+        if (method === "equal-installments") {
+          const power = Math.pow(1 + monthlyRate, totalMonths);
+          const monthlyPayment = (principal * (monthlyRate * power)) / (power - 1);
+          const totalRepayment = monthlyPayment * totalMonths;
+          const totalInterest = totalRepayment - principal;
+          
+          // 计算已支付利息
+          let paidInterest = 0;
+          let remainingPrincipal = principal;
+          for (let i = 1; i <= currentMonth; i++) {
+            const interestPayment = remainingPrincipal * monthlyRate;
+            paidInterest += interestPayment;
+            const principalPayment = monthlyPayment - interestPayment;
+            remainingPrincipal -= principalPayment;
+          }
+          
+          return totalInterest - paidInterest;
+        } else {
+          // 等额本金剩余利息计算
+          const monthlyPrincipal = principal / totalMonths;
+          let remainingInterest = 0;
+          
+          for (let i = currentMonth + 1; i <= totalMonths; i++) {
+            const currentPrincipal = principal - (monthlyPrincipal * (i - 1));
+            remainingInterest += currentPrincipal * monthlyRate;
+          }
+          
+          return remainingInterest;
+        }
+      }
+
+      function calculateNewTotalInterest(principal, monthlyRate, months, method) {
+        if (method === "equal-installments") {
+          const power = Math.pow(1 + monthlyRate, months);
+          const monthlyPayment = (principal * (monthlyRate * power)) / (power - 1);
+          return monthlyPayment * months - principal;
+        } else {
+          // 等额本金
+          return ((months + 1) * principal * monthlyRate) / 2;
+        }
+      }
+
+      function calculatePaidAmount(principal, monthlyRate, totalMonths, method, currentMonth) {
+        if (method === "equal-installments") {
+          const power = Math.pow(1 + monthlyRate, totalMonths);
+          const monthlyPayment = (principal * (monthlyRate * power)) / (power - 1);
+          return monthlyPayment * currentMonth;
+        } else {
+          // 等额本金
+          const monthlyPrincipal = principal / totalMonths;
+          let totalPaid = 0;
+          
+          for (let i = 1; i <= currentMonth; i++) {
+            const currentPrincipal = principal - (monthlyPrincipal * (i - 1));
+            const monthlyInterest = currentPrincipal * monthlyRate;
+            totalPaid += monthlyPrincipal + monthlyInterest;
+          }
+          
+          return totalPaid;
+        }
+      }
+
+      function displayOriginalResults(loan) {
+        if (loan.method === "equal-installments") {
+          document.getElementById("monthlyPayment").innerText =
+            loan.monthlyPayment.toFixed(2) + " 元";
+        } else {
+          const monthlyDecrease = (document.getElementById("loanAmount").value / 
+            (document.getElementById("loanTerm").value * 12)) * 
+            (document.getElementById("interestRate").value / 100 / 12);
+          document.getElementById("monthlyPayment").innerHTML = 
+            `首月 ${loan.monthlyPayment.toFixed(2)} 元 (每月递减约 ${monthlyDecrease.toFixed(2)} 元)`;
+        }
+
+        document.getElementById("totalInterest").innerText =
+          loan.totalInterest.toFixed(2) + " 元";
+        document.getElementById("totalRepayment").innerText =
+          loan.totalRepayment.toFixed(2) + " 元";
+      }
+
+      function displayPrepaymentResults(result) {
+        if (!result) return;
+
+        document.getElementById("prepaymentResults").style.display = "block";
+        document.getElementById("remainingPrincipal").innerText =
+          result.remainingPrincipal.toFixed(2) + " 元";
+        
+        if (result.method === "equal-installments") {
+          document.getElementById("newMonthlyPayment").innerText =
+            result.newMonthlyPayment.toFixed(2) + " 元";
+        } else {
+          const prepaymentAmount = parseFloat(document.getElementById("prepaymentAmount").value);
+          const newPrincipal = result.remainingPrincipal - prepaymentAmount;
+          const monthlyRate = parseFloat(document.getElementById("interestRate").value) / 100 / 12;
+          const monthlyDecrease = (newPrincipal / result.remainingMonths) * monthlyRate;
+          document.getElementById("newMonthlyPayment").innerHTML =
+            `首月 ${result.newMonthlyPayment.toFixed(2)} 元 (每月递减约 ${monthlyDecrease.toFixed(2)} 元)`;
+        }
+        
+        document.getElementById("remainingMonths").innerText =
+          result.remainingMonths + " 个月";
+        document.getElementById("savedInterest").innerText =
+          result.savedInterest.toFixed(2) + " 元";
+        document.getElementById("newTotalRepayment").innerText =
+          result.newTotalRepayment.toFixed(2) + " 元";
+      }
+
+      // 页面加载时根据默认年限（30年）设置默认利率
+      window.onload = updateInterestRate;
+    </script>
+  </body>
+</html>
